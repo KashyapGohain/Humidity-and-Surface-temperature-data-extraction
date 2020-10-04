@@ -1,0 +1,22 @@
+import rasterio
+import rasterio.features
+import rasterio.warp
+import os
+from rasterio.crs import CRS
+import gdal
+
+import os
+#import processing
+gdal.UseExceptions()
+
+## List input raster files
+path=os.listdir('E:/Thesis/modis')
+rasterfiles=os.listdir(os.getcwd())
+print(rasterfiles)
+for files in rasterfiles:
+    if files[-4: ] == '.hdf':
+        hdflayer = gdal.Open(rasterfiles[1], gdal.GA_ReadOnly)
+        rlayer = gdal.Open(hdflayer.GetSubDatasets()[0][0], gdal.GA_ReadOnly)
+        outputName1 = rlayer.GetMetadata_Dict()['LOCALGRANULEID'][:-4]+'_LST.tiff'
+        outputRaster ='E:/Thesis/modis/Raster/WVnew2'+ outputName1
+        reprj=gdal.Warp(outputRaster,rlayer,dstSRS='EPSG:4326')
